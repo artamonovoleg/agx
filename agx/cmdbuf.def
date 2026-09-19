@@ -1,0 +1,1004 @@
+enum Depth Format
+  Float32                        = 0x00
+  Unorm16                        = 0x04
+
+enum Image Channels
+  R8                             = 0x00
+  R16                            = 0x09
+  R8G8                           = 0x0a
+  R5G6B5                         = 0x0b
+  R4G4B4A4                       = 0x0c
+  A1R5G5B5                       = 0x0d
+  R5G5B5A1                       = 0x0e
+  R32                            = 0x21
+  R16G16                         = 0x23
+  R11G11B10                      = 0x25
+  R10G10B10A2                    = 0x26
+  R9G9B9E5                       = 0x27
+  R8G8B8A8                       = 0x28
+  R32G32                         = 0x31
+  R16G16B16A16                   = 0x32
+  R32G32B32A32                   = 0x38
+
+enum Image Layout
+  Linear                         = 0
+  Twiddled                       = 1
+  GPU                            = 2
+  Interchange                    = 3
+
+enum Load Action
+  Dont Care                      = 1
+  Clear Or Load                  = 3
+
+enum Image Dimension
+  1D                             = 0
+  1D Array                       = 1
+  2D                             = 2
+  2D Array                       = 3
+  2D Multisampled                = 4
+  3D                             = 5
+  Cube                           = 6
+  Cube Array                     = 7
+  2D Array Multisampled          = 8
+
+enum Channel
+  R                              = 0
+  G                              = 1
+  B                              = 2
+  A                              = 3
+
+enum Primitive
+  Points                         = 0
+  Lines                          = 1
+  Line strip                     = 3
+  Triangles                      = 6
+  Triangle strip                 = 9
+
+struct Encoder Operation : size 40
+
+  Marker                         :     0  32  hex
+
+  Kind                           :    32  32  hex
+
+  Cursor                         :    64   8  uint
+  Program                        :    72  16  hex
+
+  Unk 07                         :    88   8  hex
+  Tag                            :    96  32  hex
+  Primary X                      :   128  32  uint
+  Primary Y                      :   160  32  uint
+  Primary Z                      :   192  32  uint
+  Secondary X                    :   224  32  uint
+  Secondary Y                    :   256  32  uint
+  Secondary Z                    :   288  32  uint
+
+struct Blit Copy : size 112
+  Source Width                   :     0  32  uint
+  Source Height                  :    32  32  uint
+
+  Tile Width                     :    64  32  uint
+  Tile Height                    :    96  32  uint
+  Destination Width              :   448  32  uint
+  Destination Height             :   480  32  uint
+
+  Unk 40                         :   512  32  uint
+
+  Unk 44                         :   544  32  uint
+
+  Unk 48                         :   576  32  uint
+
+  Unk 4c                         :   608  32  uint
+
+enum Record Stage : bitmask
+  Dispatch                       = 1
+  Blit                           = 2
+  Acceleration Structure         = 4
+  Vertex                         = 8
+  Fragment                       = 16
+  Tile                           = 32
+  Object                         = 64
+  Mesh                           = 128
+  Resource State                 = 256
+  Machine Learning               = 512
+
+struct Render Pass Attachment : size 24
+
+  Unk 0                          :     0  32  hex
+
+  Slot Tag                       :    32  32  uint
+
+  Block Bytes                    :    64  32  uint
+
+  Unk C                          :    96  32  hex
+
+  Share                          :   128  32  hex
+
+  Unk 14                         :   160  16  hex
+
+  Next Slot                      :   176  16  uint
+
+struct Cmd Header : size 176
+
+  Unk 0                          :     0  32  hex
+
+  Unk 4                          :    32  32  hex
+
+  Unk ac                         :  1376  32  hex
+
+struct Copy Record : size 816
+
+  Size                           :     0  16  uint
+
+  Stages                         :  1472  32  Record Stage
+
+  Unk bc                         :  1504  32  Record Stage
+
+  Inline Command Bytes           :  2336  15  uint
+
+  Source Address Bits 15 To 23   :  2351   9  hex
+
+  Run Token                      :  3104  32  hex
+
+  Unk 84                         :  1056  32  hex
+
+  Unk a0                         :  1280  32  hex
+
+  Unk a4                         :  1312  32  hex
+
+  Barrier Consumer After Stages  :  1344  32  Record Stage
+  Barrier Consumer Before Stages :  1376  32  Record Stage
+  Barrier Producer After Stages  :  1408  32  Record Stage
+  Barrier Producer Before Stages :  1440  32  Record Stage
+
+  Pointer c4                     :  1568  64  address
+  Pointer 11c                    :  2272  64  address
+  Pointer 134                    :  2464  64  address
+  Pointer 13c                    :  2528  64  address
+  Pointer 144                    :  2592  64  address
+  Pointer 14c                    :  2656  64  address
+
+  Pointer 15c                    :  2784  64  address
+
+  Source Address Bits 32 To 63   :  2368  32  hex
+
+  Unk 154                        :  2720  32  hex
+
+  Unk 164                        :  2848  32  hex
+
+  Unk 168                        :  2880  32  hex
+
+  Unk 190                        :  3200  32  hex
+
+  Unk 214                        :  4256  32  hex
+
+  Unk 21c                        :  4320  32  hex
+
+  Unk 224                        :  4384  32  hex
+
+  Unk 2f8                        :  6080  32  hex
+
+  Unk 30c                        :  6240  32  hex
+
+  Unk 318                        :  6336  32  hex
+
+  Unk 31c                        :  6368  32  hex
+
+  Unk 320                        :  6400  32  hex
+
+  Unk 32c                        :  6496  16  hex
+  Encoder Follows                :  6512   1  bool
+
+  Unk 32e Hi                     :  6513  15  hex
+
+struct Render Pass : size 2752
+
+  Size                           :     0  16  uint
+
+  Attachment Bytes               :  1184   8  uint
+
+  Stages                         :  1472  32  Record Stage
+
+  Unk bc                         :  1504  32  Record Stage
+
+  Inline Command Bytes           :  2336  15  uint
+  Inline Commands Present        :  2351   1  bool
+
+  Kind Tag                       :  2352   8  hex
+
+  Render Target Descriptors      :  4200  32  address shr(4)
+
+  Color Load Action Mask         :  8648  24  hex
+
+  Background Program             :  8672  64  address
+
+  Store Program                  :  8928  64  address
+
+  Store Program Copy             :  9056  64  address
+
+  Unk 1136                       :  9088  32  hex = 0x100
+
+  Scissor Buffer                 :  9120  64  address
+
+  Depth Bias Table               :  9184  64  address
+
+  Depth Unk 4a4                  :  9504  32  hex = 0x0
+
+  Depth Buffer                   :  9568  64  address
+  Depth Meta                     :  9760  64  address
+  Depth Buffer Copy              :  9888  64  address
+  Depth Meta Copy                : 10080  64  address
+
+  Depth Buffer Partial Render    : 17248  64  address
+  Depth Meta Partial Render      : 17312  64  address
+
+  Stencil Buffer                 : 10208  64  address
+  Stencil Meta                   : 10400  64  address
+  Stencil Buffer Copy            : 10528  64  address
+  Stencil Meta Copy              : 10720  64  address
+  Stencil Buffer Partial Render  : 17376  64  address
+  Stencil Meta Partial Render    : 17440  64  address
+
+  ZLS Control                    :  9312  24  hex
+
+  Depth Format                   :  9336   8  Depth Format = Float32
+
+  Few Primitives                 : 10912   1  bool
+  Width                          : 10976  32  uint
+  Height                         : 11008  32  uint
+
+  Unknown Program                : 11104  64  address
+
+  Depth Clear                    : 14304  32  float
+  Stencil Clear                  : 14336   8  uint
+  Load Action                    : 14344   8  Load Action
+
+  Any Load                       : 14408   1  bool
+
+  Tile Stores                    : 14528   8  uint
+
+  Partial Load Action Mask       : 15752  24  hex
+
+  Partial Background Program     : 15776  64  address
+
+  Partial Store Program          : 16032  64  address
+  Partial Store Program Copy     : 16160  64  address
+
+  Tile Memory Request Copy       : 17568   1  bool
+  Clear                          : 17632   1  bool
+
+  Run Token                      : 18080  32  hex
+
+  Clear And Store                : 18208   1  bool
+
+  Uniform Slice                  : 18336  64  address
+
+  Uniform Bind Count             : 18400  32  uint
+
+  Width Copy                     : 18464  32  uint
+
+  Height Copy                    : 18496  32  uint
+
+  Sample Count                   : 18528  32  uint
+
+  Imageblock Sample Length       : 19072  32  uint
+  Tile Width                     : 19104  32  uint
+  Tile Height                    : 19136  32  uint
+
+  Attachment Count               : 21696  32  uint
+
+  Attachment Address Low         : 21792  32  hex
+
+  Unk 84                         :  1056   8  hex
+
+  Unk a0                         :  1280  32  hex
+
+  Unk a4                         :  1312   8  hex
+
+  Barrier Consumer After Stages  :  1344  32  Record Stage
+  Barrier Consumer Before Stages :  1376  32  Record Stage
+  Barrier Producer After Stages  :  1408  32  Record Stage
+  Barrier Producer Before Stages :  1440  32  Record Stage
+
+  Encoder Stream Low             :  1568   8  uint
+  Encoder Stream                 :  1576  24  address shr(8)
+
+  Unk 12c                        :  2400  24  hex
+
+  Unk 17c                        :  3040  32  hex
+
+  Unk 180                        :  3072  32  hex
+
+  Unk 184                        :  3104   8  hex
+
+  Unk 206                        :  4144   8  hex
+
+  Unk 214                        :  4256  16  hex
+
+  Unk 2ed                        :  5992  32  hex
+
+  Unk 2f1                        :  6024  32  hex
+
+  Unk 2f5                        :  6056  32  hex
+
+  Unk 2f9                        :  6088  32  hex
+
+  Tile Memory Request            :  6176   1  bool
+
+  Unk 310                        :  6272  32  hex
+
+  Unk 314                        :  6304  32  hex
+
+  Unk 318                        :  6336  32  hex
+
+  Unk 380                        :  7168   8  hex
+
+  Unk 434                        :  8608   8  hex
+
+  Unk 494                        :  9376  32  hex
+
+  Tile Memory Blocks             : 10848   8  uint
+
+  Tile Memory Samples            : 10864   8  uint
+
+  Unk 555                        : 10920   8  hex
+
+  Unk 566                        : 11056   8  hex
+
+  Unk 615                        : 12456  32  hex
+
+  Unk 619                        : 12488  32  hex
+
+  Unk 61d                        : 12520  32  hex
+
+  Unk 621                        : 12552  24  hex
+
+  Unk 624                        : 12576  16  uint
+
+  Unk 71c                        : 14560  32  hex
+
+  Unk 720                        : 14592  32  hex
+
+  Unk 724                        : 14624  32  hex
+
+  Unk 770                        : 15232   8  hex
+
+  Unk 7ac                        : 15712   8  hex
+
+  Unk 8cc                        : 18016   8  hex
+
+  Unk 8e0                        : 18176  32  hex
+
+  Unk 95c                        : 19168   8  hex
+
+  Unk 974                        : 19360   8  hex
+
+  Unk a9c                        : 21728   8  hex
+
+  Sample Position 0              : 18560  32  uint
+  Sample Position 1              : 18592  32  uint
+  Sample Position 2              : 18624  32  uint
+  Sample Position 3              : 18656  32  uint
+  Sample Position 4              : 18688  32  uint
+  Sample Position 5              : 18720  32  uint
+  Sample Position 6              : 18752  32  uint
+  Sample Position 7              : 18784  32  uint
+
+enum Vdm Block Type
+  Ppp State Update               = 0
+  Barrier                        = 1
+  Vdm State Update               = 2
+  Index List                     = 3
+  Stream Link                    = 4
+  Tessellate                     = 5
+  Stream Terminate               = 6
+
+enum Index Size
+  U8                             = 0
+  U16                            = 1
+  U32                            = 2
+
+struct Vdm State Header : size 4
+  Present                        :     0   8  hex = 0x0
+
+  Unk 0:8                        :     8  21  hex = 0x0
+  Block Type                     :    29   3  Vdm Block Type = Vdm State Update
+
+struct Vdm State Pipeline : size 12
+
+  Shader Word 0                  :     0  31  hex = 0x0
+  Vertex Amplify                 :    31   1  bool = false
+  Pipeline                       :    32  32  address
+
+  Vertex Caller Count            :    64   8  uint
+
+  Program Buffer                 :    72  16  address shr(14)
+  Padding                        :    88   8  hex = 0x0
+
+struct Vdm State Varyings : size 4
+
+  Vertex Output Count            :     0   8  uint
+
+  Vertex Output Count Copy       :     8   8  uint
+
+  Vertex Output Count High       :    16   8  uint
+
+  Unk 4:24                       :    24   8  hex = 0x0
+
+struct Vdm State Unk Word : size 4
+  Value                          :     0  32  hex = 0x0
+
+struct Vdm State Vertex Unknown : size 4
+
+  Flat Shading Control           :     0   2  uint = 0
+  Unk 2                          :     2   2  hex = 0x0
+
+  Unk 4                          :     4   1  bool = false
+  Unk 5                          :     5   1  bool = false
+
+  Generate Primitive Id          :     6   1  bool = false
+
+  Unk 7                          :     7  25  hex = 0x0
+
+struct Vdm State : size 28
+  Present                        :     0   8  hex = 0x2e
+
+  Unk 0:8                        :     8  21  hex = 0x0
+  Block Type                     :    29   3  Vdm Block Type = Vdm State Update
+
+  Shader Word 0                  :    32  31  hex = 0x0
+
+  Vertex Amplify                 :    63   1  bool = false
+  Pipeline                       :    64  32  address
+
+  Vertex Caller Count            :    96   8  uint
+
+  Program Buffer                 :   104  16  address shr(14)
+  Padding                        :   120   8  hex = 0x0
+
+  Vertex Output Count            :   128   8  uint
+  Vertex Output Count Copy       :   136   8  uint
+
+  Unk 4:16                       :   144  16  hex = 0x0
+
+  Unk 5                          :   160  32  hex = 0x0
+
+  Unk 6                          :   192  32  hex = 0x0
+
+struct Ppp Frg Face Ctl Pso : size 4
+
+  Sref                           :     0   8  hex = 0x0
+
+  Pointlinewidth                 :     8  10  uint = 15
+  Fill Mode Override             :    18   2  hex = 0x0
+  Linefilllastpixel              :    20   1  bool = false
+  Dwritedisable                  :    21   1  bool = false
+  Fs Depth Dir Qual              :    22   2  hex = 0x0
+  Dcmpmode                       :    24   3  hex = 0x0
+  Rsvd 0                         :    27   1  hex = 0x0
+
+  Objtype                        :    28   4  uint = 0
+
+enum Pass type
+  Opaque                         = 0
+  Translucent                    = 1
+  Punch through                  = 2
+  Translucent punch through      = 3
+
+struct Ppp Frg Common Ctl : size 4
+  Front Face Dir                 :     0   1  bool = false
+  Cullmode                       :     1   2  uint = 0
+  Rsvd 0                         :     3   4  hex = 0x0
+  In Batch Window                :     7   1  bool = false
+  Tagsort Flush Ctl              :     8   2  uint = 0
+  Rsvd 1                         :    10   3  hex = 0x0
+  Tagsort Accum Disable          :    13   1  bool = false
+  Visbool                        :    14   1  bool = false
+  Vistest                        :    15   1  bool = false
+  Scenable                       :    16   1  bool = false
+  Dbenable                       :    17   1  bool = false
+  Face Stencil Pres              :    18   1  bool = false
+
+  Two Sided                      :    19   1  bool = false
+  Rect Warp Disable              :    20   1  bool = false
+  Tagwritedisable                :    21   1  bool = false
+  Two Pass Fb Opa                :    22   1  bool = false
+  Mid Render Compute             :    23   1  bool = false
+  Rsvd 2                         :    24   1  hex = 0x0
+  Sample Mask Select             :    25   1  bool = false
+
+  Tri Merge Disable              :    26   1  bool = false
+  Overlap Check Mode             :    27   1  bool = false
+  Usc Esl 2                      :    28   1  bool = false
+
+  Passtype                       :    29   3  Pass type = Opaque
+
+struct Ppp Frg Face Stencil : size 4
+  Swmask                         :     0   8  hex = 0xff
+  Scmpmask                       :     8   8  hex = 0xff
+
+  Sop 3                          :    16   3  uint = 0
+  Sop 2                          :    19   3  uint = 0
+  Sop 1                          :    22   3  uint = 0
+  Scmpmode                       :    25   3  uint = 7
+  Rsvd 0                         :    28   4  hex = 0x0
+
+struct Ppp Frg Vis Query Tag Flush Pso : size 4
+  Tagsort Flush Data             :     0  17  hex
+  Vis Query Index                :    17  15  uint = 0
+
+struct Ppp State : size 8
+  Pointer Hi                     :     0   8  hex = 0x0
+  Size (words)                   :     8   8  uint
+
+  Unk 16                         :    16  13  hex = 0x0
+  Block Type                     :    29   3  Vdm Block Type = Ppp State Update
+  Pointer                        :    32  32  address
+
+struct Ppp Header : size 4
+  Rsvd 0                         :     0   2  hex = 0x0
+  Pres Frg Face Ctl F            :     2   1  bool = false
+  Pres Frg Face Ctl F Pso        :     3   1  bool = false
+  Pres Frg Face Stencil F        :     4   1  bool = false
+  Pres Frg Face Ctl B            :     5   1  bool = false
+  Pres Frg Face Ctl B Pso        :     6   1  bool = false
+  Pres Frg Face Stencil B        :     7   1  bool = false
+  Pres Frg Dbsc                  :     8   1  bool = false
+  Viewport State Is 16           :     9   1  bool = false
+  Pres Region Clip               :    10   1  bool = false
+  Pres Viewport                  :    11   1  bool = false
+  Viewport Count                 :    12   4  uint minus(1)
+  Pres Wclamp                    :    16   1  bool = false
+  Pres Outselects                :    17   1  bool = false
+  Pres Varying Words             :    18   1  bool = false
+  Pres Ms Prim Output            :    19   1  bool = false
+  Pres Frg Usc Opt Esl           :    20   1  bool = false
+  Pres Pppctrl                   :    21   1  bool = false
+  Pres Pppctrl Pso               :    22   1  bool = false
+  Pres Frg Shader Words          :    23   1  bool = false
+  Pres Frg Vis Query Tag Flush   :    24   1  bool = false
+  Pres Frg Vis Query Tag Flush Pso :    25   1  bool = false
+  Pres Vs Amplify Ctrl           :    26   1  bool = false
+  Pres Vs Output Size            :    27   1  bool = false
+  Pres Amplify Varying Words     :    28   1  bool = false
+  Last Pipe                      :    29   1  bool = false
+  Context Switch                 :    30   1  bool = false
+  Terminate                      :    31   1  bool = false
+
+struct Fragment Shader Word 0 : size 4
+
+  Unk 0                          :     0   8  hex = 0x0
+
+  Coefficients Present           :     8   1  bool = false
+
+  Unk 9                          :     9   7  hex = 0x0
+
+  CF binding count               :    16   7  uint = 0
+
+  Unk 23                         :    23   9  hex = 0x0
+
+struct Fragment Shader Word 3 : size 4
+
+  Unk 0                          :     0  18  hex = 0x0
+
+  Unk 18                         :    18   2  hex = 0x0
+
+  Unk 20                         :    20   4  hex = 0x0
+
+  Enable                         :    24   1  bool = true
+
+  Unk 25                         :    25   7  hex = 0x0
+
+struct Output Select : size 4
+
+  Clip distance plane 0          :     0   1  bool = false
+  Clip distance plane 1          :     1   1  bool = false
+  Clip distance plane 2          :     2   1  bool = false
+  Clip distance plane 3          :     3   1  bool = false
+  Clip distance plane 4          :     4   1  bool = false
+  Clip distance plane 5          :     5   1  bool = false
+  Clip distance plane 6          :     6   1  bool = false
+  Clip distance plane 7          :     7   1  bool = false
+  Clip distance plane 8          :     8   1  bool = false
+  Clip distance plane 9          :     9   1  bool = false
+  Clip distance plane 10         :    10   1  bool = false
+  Clip distance plane 11         :    11   1  bool = false
+  Clip distance plane 12         :    12   1  bool = false
+  Clip distance plane 13         :    13   1  bool = false
+  Clip distance plane 14         :    14   1  bool = false
+  Clip distance plane 15         :    15   1  bool = false
+
+  Varyings                       :    16   1  bool = false
+
+  Unk 17                         :    17   1  hex = 0x0
+
+  Point size                     :    18   1  bool = false
+  Viewport target                :    19   1  bool = false
+  Render target                  :    20   1  bool = false
+
+  Frag coord Z                   :    21   1  bool = false
+  Barycentric coordinates        :    22   1  bool = false
+
+  Unk 23                         :    23   1  hex = 0x0
+
+  Unk 24                         :    24   8  hex = 0x0
+
+struct Ppp Control : size 4
+
+  Cullmode                       :     0   2  uint = 0
+  Rsvd 0                         :     2   2  hex = 0x0
+
+  Wbuffen                        :     4   1  bool = false
+
+  Wclampen                       :     5   1  bool = false
+
+  Pretransform                   :     6   1  bool = false
+
+  Flatshade Vtx                  :     7   2  uint = 1
+
+  Drawclippededges               :     9   1  bool = false
+
+  Clip Mode                      :    10   2  uint = 1
+  Primitive Id Pres              :    12   1  bool = false
+
+  Ms Fs Buffer Needed            :    13   1  bool = false
+  Rsvd 1                         :    14   1  hex = 0x0
+  Prim Msaa                      :    15   1  bool = false
+  Front Face Dir                 :    16   1  bool = false
+
+  Rasterizer Discard             :    17   1  bool = false
+  Rsvd 2                         :    18  14  hex = 0x0
+
+struct Region Clip : size 8
+  X Max                          :     0  16  uint
+  X Min                          :    16  15  uint
+  Enable                         :    31   1  bool = true
+  Y Max                          :    32  16  uint
+  Y Min                          :    48  16  uint
+
+struct Viewport Control : size 4
+  Last Viewport                  :     0  32  uint minus(1)
+
+enum Address Mode
+  Clamp to edge                  = 0
+  Repeat                         = 1
+  Mirror repeat                  = 2
+  Clamp to border color          = 3
+  Mirror clamp to edge           = 5
+
+struct Render Target : size 16
+
+  Dimension                      :     0   4  Image Dimension
+  Layout                         :     4   2  Image Layout
+  Channels                       :     6   7  Image Channels
+
+  Unk 13                         :    13   2  hex
+
+  Is Float                       :    15   1  bool = false
+  Swizzle R                      :    16   2  Channel
+  Swizzle G                      :    18   2  Channel
+  Swizzle B                      :    20   2  Channel
+  Swizzle A                      :    22   2  Channel
+
+  Width                          :    24  14  uint minus(1)
+  Height                         :    38  14  uint minus(1)
+
+  Unk 52                         :    52   1  bool
+
+  Rotate 90                      :    53   1  bool = false
+
+  Transpose                      :    54   1  bool = false
+
+  Unk 55                         :    55   1  hex
+
+  Multisample 4x                 :    56   1  bool = false
+
+  Unk 57                         :    57   1  hex
+
+  Mipmapped                      :    58   1  bool = false
+
+  Compress                       :    59   1  bool = false
+
+  Unk 60                         :    60   4  hex
+
+  Buffer                         :    64  37  address shr(4)
+
+  Unk 101                        :   101   7  hex
+
+  Tiles per row                  :   108  10  uint minus(1)
+
+  Unk 118                        :   118   6  hex
+  Layered                        :   124   1  bool = false
+
+  sRGB                           :   125   1  bool = false
+
+  Unk 126                        :   126   1  hex
+
+  Extended                       :   127   1  bool = false
+
+struct Image Descriptor Trailer : size 8
+
+  Metadata Shifted               :     0  44  address shr(4)
+
+  Base Level                     :    44   4  uint
+  Last Level                     :    48   8  uint
+
+  Unk 07                         :    56   8  hex
+
+enum Sampler Filter
+  Nearest                        = 0
+  Linear                         = 1
+
+enum Sampler Mip Filter
+  Not Mipmapped                  = 0
+  Nearest                        = 1
+  Linear                         = 2
+
+enum Sampler Border Mode
+  Transparent Black              = 0
+  Opaque Black                   = 1
+  Opaque White                   = 2
+
+enum Sampler Compare Func
+  Less Equal                     = 0
+  Greater Equal                  = 1
+  Less                           = 2
+  Greater                        = 3
+  Equal                          = 4
+  Not Equal                      = 5
+  Always                         = 6
+  Never                          = 7
+
+struct Sampler : size 32
+
+  Min Lod                        :     0  10  uint
+  Max Lod                        :    10  10  uint
+  Max Aniso                      :    20   3  uint
+  Mag Filter                     :    23   2  Sampler Filter
+  Min Filter                     :    25   2  Sampler Filter
+  Mip Filter                     :    27   2  Sampler Mip Filter
+  Wrap S                         :    29   3  Address Mode
+  Wrap T                         :    32   3  Address Mode
+  Wrap R                         :    35   3  Address Mode
+  Non Normalized Coords          :    38   1  bool
+  Compare Func                   :    39   3  Sampler Compare Func
+  Compare Mode                   :    42   1  bool
+  Lod Bias                       :    43  11  uint
+  Tri Adjust                     :    54   3  uint
+  Aniso Adjust                   :    57   3  uint
+  Alpha Border Mode              :    60   1  bool
+  Border Mode                    :    61   3  Sampler Border Mode
+
+  Border Color 0                 :    64  32  hex
+  Border Color 1                 :    96  32  hex
+  Border Color 2                 :   128  32  hex
+  Border Color 3                 :   160  32  hex
+
+  Unk 192                        :   192  32  hex
+
+  Unk 224                        :   224  32  hex
+
+struct Render Target Metadata : size 16
+  Buffer                         :     0  37  address shr(4)
+
+  Unk 37                         :    37  27  hex
+
+  Unk 64                         :    64  32  hex
+
+  Unk 96                         :    96  32  hex
+
+struct Scissor : size 16
+  X Max                          :   0:0  16  uint
+  X Min                          :  0:16  16  uint
+  Y Max                          :   1:0  16  uint
+  Y Min                          :  1:16  16  uint
+
+  Z Min                          :   2:0  32  float = 0.0
+  Z Max                          :   3:0  32  float = 1.0
+
+struct Ppp Frg Dbsc : size 4
+  Scissor Index                  :   0:0  16  uint
+  Depth Bias Index               :  0:16  16  uint
+
+struct Depth Bias : size 12
+  Constant                       :   0:0  32  float = 0.0
+  Slope Scale                    :   1:0  32  float = 0.0
+  Clamp                          :   2:0  32  float = 0.0
+
+struct Viewport : size 24
+  Translate X                    :     0  32  float
+  Scale X                        :    32  32  float
+  Translate Y                    :    64  32  float
+  Scale Y                        :    96  32  float
+  Near Z                         :   128  32  float
+  Far Z                          :   160  32  float
+
+struct Linkage : size 16
+  Tag                            :   0:0  32  hex = 0xC020000
+  Unk 1                          :   1:0  32  hex = 0x100
+  Unk 2                          :   2:0  32  hex = 0x0
+  Varying count                  :   3:0  32  uint
+
+enum Usc Control
+  Shader                         = 0x0d
+  Uniform                        = 0x1d
+  Preshader                      = 0x38
+  Uniform High                   = 0x3d
+  Shared                         = 0x4d
+  Fragment Properties            = 0x58
+  No Preshader                   = 0x88
+  Registers                      = 0x8d
+  Sampler                        = 0x9d
+  Texture                        = 0xdd
+
+struct Usc Uniform : size 8
+  Tag                            :   0:0   8  Usc Control = Uniform
+  Start Halfs                    :   0:8   8  uint
+  Unk 16                         :  0:16   4  hex = 0x0
+  Size Halfs                     :  0:20   6  uint
+  Buffer                         :  0:26  38  address shr(2)
+
+struct Usc Uniform High : size 8
+  Tag                            :   0:0   8  Usc Control = Uniform High
+  Start Halfs                    :   0:8   8  uint
+  Unk 16                         :  0:16   4  hex = 0x0
+  Size Halfs                     :  0:20   6  uint
+  Buffer                         :  0:26  38  address shr(2)
+
+struct Usc Texture : size 8
+  Tag                            :   0:0   8  Usc Control = Texture
+  Start                          :   0:8   8  uint
+  Unk 16                         :  0:16   4  hex = 0x0
+  Count                          :  0:20   7  uint
+  Buffer                         :  0:27  36  address shr(3)
+
+struct Usc Sampler : size 8
+  Tag                            :   0:0   8  Usc Control = Sampler
+  Start                          :   0:8   8  uint
+  Unk 16                         :  0:16   4  hex = 0x0
+  Count                          :  0:20   7  uint
+  Buffer                         :  0:27  36  address shr(3)
+
+enum Usc Shared Layout
+  Vertex Or Compute              = 0x24
+  Tile 16x16                     = 0x36
+  Tile 32x32                     = 0x2f
+  Tile 32x16                     = 0x3f
+
+struct Usc Shared : size 4
+  Tag                            :     0   8  Usc Control = Shared
+  Uses Shared Memory             :     8   1  bool = false
+  Unk 9                          :     9   1  hex = 0x0
+  Layout                         :    10   6  Usc Shared Layout = Vertex Or Compute
+  Sample Count Log2              :    16   2  uint
+  Sample Stride In 8 Bytes       :    20   4  uint
+  Bytes Per Threadgroup Over 256 :    24   8  uint
+
+struct Usc Shader : size 6
+  Tag                            :     0   8  Usc Control = Shader
+  Loads Varyings                 :     8   1  bool = false
+
+  Unk 9                          :     9   1  bool = false
+  Unk 10                         :    10   6  uint
+  Code                           :    16  32  address
+
+struct Usc Registers : size 4
+  Tag                            :     0   8  Usc Control = Registers
+  Register Count Over 8          :     8   5  uint
+  Unk 13                         :    13   1  bool = false
+  Unk 14                         :    14   4  hex = 0x0
+  Spill Size                     :    18   4  hex = 0x0
+  Unk 22                         :    22   2  hex = 0x0
+  Unk 24                         :    24   8  hex = 0x0
+
+struct Usc No Preshader : size 2
+  Tag                            :     0   8  Usc Control = No Preshader
+  Unk 8                          :     8   8  hex = 0x0
+
+struct Usc Preshader : size 8
+  Tag                            :   0:0   8  Usc Control = Preshader
+  Unk 8                          :   0:8  24  hex = 0xc08000
+  Code                           :   1:0  32  address
+
+struct Usc Fragment Properties : size 4
+  Tag                            :     0   8  Usc Control = Fragment Properties
+  Early Z Testing                :     8   1  bool = false
+  Unk 9                          :     9   1  bool = false
+  Unconditional Discard 1        :    10   1  bool = false
+  Unconditional Discard 2        :    11   1  bool = false
+  Unk 12                         :    12   4  hex = 0x0
+  Unk 16                         :    16   8  hex = 0x0
+  Unk 24                         :    24   8  hex = 0x0
+
+struct Bind pipeline : size 16
+  Tag                            :   0:0  32  hex = 0x4000002e
+  Unk 1                          :   1:0  16  hex = 0x1002
+  Input count                    :  1:16   8  uint = 0
+  Padding 1                      :  1:24   8  hex = 0x0
+  Pipeline                       :   2:0  32  address
+  Vertex Caller Count            :   3:0   8  uint = 0
+  Program Buffer                 :   3:8  16  address shr(14)
+  Padding 2                      :  3:24   8  hex = 0x0
+
+struct Record : size 8
+  Size (words)                   :   0:0   8  uint
+  Tag                            :   0:8  16  hex = 0x0000
+  Data                           :  0:24  40  address
+
+struct Index List : size 4
+  Index Buffer Hi                :     0   8  hex = 0x0
+  Primitive                      :     8   8  Primitive
+
+  Restart Enable                 :    16   1  bool = false
+  Index Size                     :    17   3  Index Size = U32
+  Index Buffer Size Present      :    20   1  bool = false
+  Index Buffer Present           :    21   1  bool = false
+  Index Count Present            :    22   1  bool = true
+  Instance Count Present         :    23   1  bool = true
+  Start Present                  :    24   1  bool = true
+
+  Unk 25                         :    25   1  hex = 0x0
+  Indirect Present               :    26   1  bool = false
+
+  Unk 27                         :    27   2  hex = 0x0
+  Block Type                     :    29   3  Vdm Block Type = Index List
+
+struct Stream Link : size 8
+
+  Unk 0                          :     0  28  hex = 0x0
+
+  Unk 28                         :    28   1  bool = false
+  Block Type                     :    29   3  Vdm Block Type = Stream Link
+  Target Lo                      :    32  32  hex
+
+struct Index List Indirect : size 8
+  Arguments Hi                   :     0  32  hex
+  Arguments Lo                   :    32  32  hex
+
+struct Index List Buffer : size 4
+  Buffer Lo                      :     0  32  hex
+
+struct Index List Count : size 4
+
+  Count                          :     0  32  uint
+
+struct Index List Instances : size 4
+  Count                          :     0  32  uint
+
+struct Index List Start : size 4
+
+  Start                          :     0  32  uint
+
+struct Index List Buffer Size : size 4
+  Size                           :     0  32  uint
+
+struct Index List Unk : size 4
+  Value                          :     0  32  hex = 0x1
+
+struct Launch : size 36
+  Command                        :   0:0  32  hex = 0x1002
+  Pipeline                       :   1:0  32  address
+  Group count X                  :   2:0  32  uint
+  Group count Y                  :   3:0  32  uint
+  Group count Z                  :   4:0  32  uint
+  Local size X                   :   5:0  32  uint
+  Local size Y                   :   6:0  32  uint
+  Local size Z                   :   7:0  32  uint
+  Unk                            :   8:0  32  hex = 0x60000160
+
+struct Stage Record List Entry : size 64
+
+  Tag                            :     0   8  uint
+
+  Unk 0                          :     8  56  uint
+  Unk 1                          :    64  64  uint
+  Unk 2                          :   128  64  uint
+  Unk 3                          :   192  64  uint
+
+  Payload Word 0                 :   256  32  uint
+  Payload Word 1                 :   288  32  uint
+  Payload Word 2                 :   320  32  uint
+  Payload Word 3                 :   352  32  uint
+  Payload Word 4                 :   384  32  uint
+  Payload Word 5                 :   416  32  uint
+  Payload Word 6                 :   448  32  uint
+  Payload Word 7                 :   480  32  uint
